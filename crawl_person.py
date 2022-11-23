@@ -20,6 +20,8 @@ def crawl_person(conn, cur, pid, driver):
     """
     try:
         eng_name = person_info.find_element(By.XPATH,'div/strong').text
+        if len(eng_name) > 100:
+            eng_name = eng_name[:100]
         # for char in eng_name: #영어는 에라 모르겠다~
         #     if char.isalpha():
     except:
@@ -94,6 +96,8 @@ def crawl_person(conn, cur, pid, driver):
                 # print(f'{profile_dict[title]} : {content}')
                 if profile_dict[title] == "nickname":
                     nickname = content
+                    if len(nickname) > 50:
+                        nickname = nickname[:50]
                 if profile_dict[title] == "body":
                     # print(f"body : {content}")
                     body_split = content.split(',')
@@ -103,8 +107,12 @@ def crawl_person(conn, cur, pid, driver):
                     height = body_split[0].replace('cm','')
                 if profile_dict[title] == "family":
                     family = content
+                    if len(family) > 100:
+                        family = family[:100]
                 if profile_dict[title] == "education":
                     education = content
+                    if len(education) > 100:
+                        education = education[:100]
         except:
             pass
 
@@ -117,11 +125,11 @@ def crawl_person(conn, cur, pid, driver):
         pass
 
     print(f"pid: {pid}\nname: {name}\neng_name : {eng_name}")
-    # print(f"photo_url : {photo_url}\nbirth_date_str : {birth_date_str}")
-    # print(f"birth_location_str : {birth_location_str}\nbirth_date : {birth_date}")
-    # print(f"award : {award}")
-    # print(f"nickname : {nickname}, height : {height}, weight: {weight}, family:{family}, edu:{education}")
-    # print(f"summary: {summary}")
+    print(f"photo_url : {photo_url}\nbirth_date_str : {birth_date_str}")
+    print(f"birth_location_str : {birth_location_str}\nbirth_date : {birth_date}")
+    print(f"award : {award}")
+    print(f"nickname : {nickname}, height : {height}, weight: {weight}, family:{family}, edu:{education}")
+    print(f"summary: {summary}")
     print('==================================')
     sql = (pid, name, eng_name, photo_url, birth_date, birth_location_str, award, nickname, height, weight, family, education, summary)
     insert_sql = """
