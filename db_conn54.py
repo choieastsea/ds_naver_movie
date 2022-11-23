@@ -15,12 +15,17 @@ def close_db(conn, cur):
     cur.close()
     conn.close()
 
-def get_movie_url(conn,cur):
+def get_movie_url(cur):
     sql = """select url from naver_top_ranked_movie_list;"""
     cur.execute(sql)
     url = cur.fetchall()
     return url
 
+def get_person_pid(cur):
+    sql = """select distinct p_id from movie_person;"""
+    cur.execute(sql)
+    pid_list = cur.fetchall()
+    return pid_list
 
 # create table movie_person (
 #     m_id int,
