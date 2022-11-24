@@ -1,8 +1,8 @@
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 
 def crawl_movie_person(conn, cur, url, driver):
-    # 한 영화에 대하여 '상세정보'에 들어가서 인물정보를 저장한다
+    """한 영화에 대하여 '상세정보'에 들어가서 인물정보를 저장한다"""
+    
     m_id = int(url.split('=')[-1])
     print(f'mid : {m_id}')
     driver.get(f'https://movie.naver.com/movie/bi/mi/detail.naver?code={m_id}')
@@ -34,7 +34,7 @@ def crawl_movie_person(conn, cur, url, driver):
         except:
             character =''
         sql_list.append((m_id, p_id, role, character))
-        print(f'mid:{m_id}\npid:{p_id}\nrole:{role}\ncharacter:{character}\n===========================')
+        # print(f'mid:{m_id}\npid:{p_id}\nrole:{role}\ncharacter:{character}\n===========================')
 
     """
     단역 및 특별출연
@@ -60,7 +60,7 @@ def crawl_movie_person(conn, cur, url, driver):
             except:
                 character = ''
             sql_list.append((m_id, p_id, role, character))
-            print(f'mid:{m_id}\npid:{p_id}\nrole:{role}\ncharacter:{character}\n===========================')
+            # print(f'mid:{m_id}\npid:{p_id}\nrole:{role}\ncharacter:{character}\n===========================')
     """
     감독 
     """
@@ -76,10 +76,10 @@ def crawl_movie_person(conn, cur, url, driver):
         role = '감독'
         character = ''
         sql_list.append((m_id, p_id, role, character))
-        print(f'mid:{m_id}\npid:{p_id}\nrole:{role}\ncharacter:{character}\n===========================')
+        # print(f'mid:{m_id}\npid:{p_id}\nrole:{role}\ncharacter:{character}\n===========================')
 
     insert_sql = """
-        insert into movie_person(m_id, p_id, role, character_)
+        insert ignore into movie_person(m_id, p_id, role, character_)
         values(%s,%s,%s,%s); """
     cur.executemany(insert_sql, sql_list)
     conn.commit()

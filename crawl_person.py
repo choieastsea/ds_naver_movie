@@ -44,7 +44,7 @@ def crawl_person(conn, cur, pid, driver):
         birth_location_str = birth_str.split('/')[1].strip()
     except:
         birth_date_str = "1900.1.1."
-        birth_location_str = "정보 없음"
+        birth_location_str = None
     birth_date_str = birth_date_str.split('.')
     try:
         year = int(birth_date_str[0])
@@ -55,14 +55,14 @@ def crawl_person(conn, cur, pid, driver):
         year = 1900
         month = 1
         date = 1
-        birth_date = datetime.date(year, month, date)
+        birth_date = None
     """
     award
     """
     try:
         award = person_info.find_element(By.CLASS_NAME, 'info_spec').find_element(By.CLASS_NAME, 'step8').find_element(By.XPATH,'following-sibling::dd').text
     except:
-        award = ''
+        award = None
     """
     nickname, height, weight, family, education, summary
     """
@@ -133,7 +133,7 @@ def crawl_person(conn, cur, pid, driver):
     print('==================================')
     sql = (pid, name, eng_name, photo_url, birth_date, birth_location_str, award, nickname, height, weight, family, education, summary)
     insert_sql = """
-        insert into person(p_id, name, eng_name, photo_url, birth_date, birth_location, award, nickname, height, weight, family, education, summary)
+        insert ignore into person(p_id, name, eng_name, photo_url, birth_date, birth_location, award, nickname, height, weight, family, education, summary)
         values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s); """
     cur.execute(insert_sql, sql)
     conn.commit()
